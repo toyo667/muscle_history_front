@@ -1,0 +1,864 @@
+openapi: 3.0.3
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/v1/user/get_info/:
+    get:
+      operationId: v1_user_get_info_retrieve
+      description: セッションからユーザ情報を取得する。
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/workout/:
+    get:
+      operationId: v1_workout_list
+      description: ワークアウト内容
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Workout'
+          description: ''
+    post:
+      operationId: v1_workout_create
+      description: ワークアウト内容
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workout'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Workout'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Workout'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+          description: ''
+  /api/v1/workout-item/:
+    get:
+      operationId: v1_workout_item_list
+      description: トレーニング種目
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkoutItem'
+          description: ''
+    post:
+      operationId: v1_workout_item_create
+      description: トレーニング種目
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkoutItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WorkoutItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WorkoutItem'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutItem'
+          description: ''
+  /api/v1/workout-item/{id}/:
+    get:
+      operationId: v1_workout_item_retrieve
+      description: トレーニング種目
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this トレーニング種目.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutItem'
+          description: ''
+    put:
+      operationId: v1_workout_item_update
+      description: トレーニング種目
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this トレーニング種目.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkoutItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WorkoutItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WorkoutItem'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutItem'
+          description: ''
+    patch:
+      operationId: v1_workout_item_partial_update
+      description: トレーニング種目
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this トレーニング種目.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkoutItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkoutItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkoutItem'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutItem'
+          description: ''
+    delete:
+      operationId: v1_workout_item_destroy
+      description: トレーニング種目
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this トレーニング種目.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/workout-session/:
+    get:
+      operationId: v1_workout_session_list
+      description: ワークアウトセッション(1回のトレーニング)
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkoutSession'
+          description: ''
+    post:
+      operationId: v1_workout_session_create
+      description: ワークアウトセッション(1回のトレーニング)
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkoutSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WorkoutSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WorkoutSession'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutSession'
+          description: ''
+  /api/v1/workout-session/{id}/:
+    get:
+      operationId: v1_workout_session_retrieve
+      description: ワークアウトセッション(1回のトレーニング)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ワークアウトセッション.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutSession'
+          description: ''
+    put:
+      operationId: v1_workout_session_update
+      description: ワークアウトセッション(1回のトレーニング)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ワークアウトセッション.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkoutSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WorkoutSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WorkoutSession'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutSession'
+          description: ''
+    patch:
+      operationId: v1_workout_session_partial_update
+      description: ワークアウトセッション(1回のトレーニング)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ワークアウトセッション.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkoutSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkoutSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkoutSession'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutSession'
+          description: ''
+    delete:
+      operationId: v1_workout_session_destroy
+      description: ワークアウトセッション(1回のトレーニング)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ワークアウトセッション.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/workout/{id}/:
+    get:
+      operationId: v1_workout_retrieve
+      description: ワークアウト内容
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ワークアウト.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+          description: ''
+    put:
+      operationId: v1_workout_update
+      description: ワークアウト内容
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ワークアウト.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workout'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Workout'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Workout'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+          description: ''
+    patch:
+      operationId: v1_workout_partial_update
+      description: ワークアウト内容
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ワークアウト.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkout'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkout'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWorkout'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workout'
+          description: ''
+    delete:
+      operationId: v1_workout_destroy
+      description: ワークアウト内容
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this ワークアウト.
+        required: true
+      tags:
+      - v1
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    PatchedWorkout:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        training_item:
+          type: string
+          format: uuid
+        feeling:
+          type: string
+          format: uuid
+        session:
+          type: string
+          format: uuid
+        rep_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          title: レップ数
+        set_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          title: セット数
+        weight_kg:
+          type: number
+          format: double
+          title: 重さ(kg)
+        trained_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: トレーニング日時
+    PatchedWorkoutItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        training_name:
+          type: string
+          title: トレーニング種目
+          maxLength: 64
+        category:
+          type: array
+          items:
+            type: string
+            format: uuid
+    PatchedWorkoutSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        started_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: トレーニング開始日時
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+          title: トレーニング終了日時
+        condition:
+          type: string
+          format: uuid
+    User:
+      type: object
+      description: shema生成用
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          maxLength: 128
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        is_superuser:
+          type: boolean
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        date_joined:
+          type: string
+          format: date-time
+      required:
+      - id
+      - password
+      - username
+    Workout:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        training_item:
+          type: string
+          format: uuid
+        feeling:
+          type: string
+          format: uuid
+        session:
+          type: string
+          format: uuid
+        rep_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          title: レップ数
+        set_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          title: セット数
+        weight_kg:
+          type: number
+          format: double
+          title: 重さ(kg)
+        trained_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: トレーニング日時
+      required:
+      - feeling
+      - id
+      - rep_count
+      - session
+      - set_count
+      - trained_at
+      - training_item
+      - weight_kg
+    WorkoutItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        training_name:
+          type: string
+          title: トレーニング種目
+          maxLength: 64
+        category:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - category
+      - id
+      - training_name
+    WorkoutSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        started_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: トレーニング開始日時
+        finished_at:
+          type: string
+          format: date-time
+          nullable: true
+          title: トレーニング終了日時
+        condition:
+          type: string
+          format: uuid
+      required:
+      - condition
+      - id
+      - started_at
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

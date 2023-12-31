@@ -1,10 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-
-interface WorkoutItem {
-  id: string;
-  training_name: string;
-  category: string;
-}
+import { WorkoutItem } from "../../openapi/api";
+import { api } from "../../utils/apis";
 
 export const Home = () => {
   const [workoutItems, setWorkoutItems] = useState<WorkoutItem[]>();
@@ -12,25 +8,33 @@ export const Home = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("/api/v1/workout-item/");
-      const json = await res.json();
-      setWorkoutItems(json);
+      // const res = await fetch("/api/v1/workout-item/");
+      // const json = await res.json();
+      // setWorkoutItems(json);
+      const res = await api().v1WorkoutItemList();
+      console.log(res.data);
     })();
   }, []);
 
   const clickHandler = React.useCallback(() => {
     (async () => {
       if (!trainingName.current) return;
-      const res = await fetch("/api/v1/workout-item/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          training_name: trainingName.current.value,
-          category: "d3c33431-47b1-4c90-b005-f1a0f3e0ac1e",
-        }), // 本体のデータ型は "Content-Type" ヘッダーと一致させる必要があります
-      });
+
+      const res = await api().v1WorkoutItemCreate({
+        training_name: trainingName.current.value,
+        category: ["d3c33431-47b1-4c90-b005-f1a0f3e0ac1e"],
+      } as any);
+
+      // const res = await fetch("/api/v1/workout-item/", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     training_name: trainingName.current.value,
+      //     category: "d3c33431-47b1-4c90-b005-f1a0f3e0ac1e",
+      //   }), // 本体のデータ型は "Content-Type" ヘッダーと一致させる必要があります
+      // });
       console.log(res);
     })();
   }, []);

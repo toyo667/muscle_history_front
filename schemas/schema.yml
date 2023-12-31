@@ -149,12 +149,48 @@ paths:
                 type: object
                 additionalProperties: {}
           description: ''
+  /api/v1/condition/:
+    get:
+      operationId: v1_condition_list
+      tags:
+      - master
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Condition'
+          description: ''
+  /api/v1/training-area/:
+    get:
+      operationId: v1_training_area_list
+      tags:
+      - master
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrainingArea'
+          description: ''
   /api/v1/user/get_info/:
     get:
       operationId: v1_user_get_info_retrieve
       description: セッションからユーザ情報を取得する。
       tags:
-      - v1
+      - authenticate
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -171,7 +207,7 @@ paths:
       operationId: v1_workout_list
       description: ワークアウト内容
       tags:
-      - v1
+      - workout
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -188,7 +224,7 @@ paths:
       operationId: v1_workout_create
       description: ワークアウト内容
       tags:
-      - v1
+      - workout
       requestBody:
         content:
           application/json:
@@ -211,12 +247,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/Workout'
           description: ''
+  /api/v1/workout-feeling/:
+    get:
+      operationId: v1_workout_feeling_list
+      tags:
+      - master
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkoutFeeling'
+          description: ''
   /api/v1/workout-item/:
     get:
       operationId: v1_workout_item_list
       description: トレーニング種目
       tags:
-      - v1
+      - workout-item
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -233,7 +287,7 @@ paths:
       operationId: v1_workout_item_create
       description: トレーニング種目
       tags:
-      - v1
+      - workout-item
       requestBody:
         content:
           application/json:
@@ -269,7 +323,7 @@ paths:
         description: A UUID string identifying this トレーニング種目.
         required: true
       tags:
-      - v1
+      - workout-item
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -292,7 +346,7 @@ paths:
         description: A UUID string identifying this トレーニング種目.
         required: true
       tags:
-      - v1
+      - workout-item
       requestBody:
         content:
           application/json:
@@ -327,7 +381,7 @@ paths:
         description: A UUID string identifying this トレーニング種目.
         required: true
       tags:
-      - v1
+      - workout-item
       requestBody:
         content:
           application/json:
@@ -361,7 +415,7 @@ paths:
         description: A UUID string identifying this トレーニング種目.
         required: true
       tags:
-      - v1
+      - workout-item
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -373,7 +427,7 @@ paths:
       operationId: v1_workout_session_list
       description: ワークアウトセッション(1回のトレーニング)
       tags:
-      - v1
+      - workout-session
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -390,7 +444,7 @@ paths:
       operationId: v1_workout_session_create
       description: ワークアウトセッション(1回のトレーニング)
       tags:
-      - v1
+      - workout-session
       requestBody:
         content:
           application/json:
@@ -402,7 +456,6 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/WorkoutSession'
-        required: true
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -426,7 +479,7 @@ paths:
         description: A UUID string identifying this ワークアウトセッション.
         required: true
       tags:
-      - v1
+      - workout-session
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -449,7 +502,7 @@ paths:
         description: A UUID string identifying this ワークアウトセッション.
         required: true
       tags:
-      - v1
+      - workout-session
       requestBody:
         content:
           application/json:
@@ -461,7 +514,6 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/WorkoutSession'
-        required: true
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -484,7 +536,7 @@ paths:
         description: A UUID string identifying this ワークアウトセッション.
         required: true
       tags:
-      - v1
+      - workout-session
       requestBody:
         content:
           application/json:
@@ -518,11 +570,29 @@ paths:
         description: A UUID string identifying this ワークアウトセッション.
         required: true
       tags:
-      - v1
+      - workout-session
       security:
       - cookieAuth: []
       - basicAuth: []
       responses:
+        '204':
+          description: No response body
+  /api/v1/workout-session/active/:
+    get:
+      operationId: v1_workout_session_active_retrieve
+      description: 現在アクティブになっているワークアウトセッションを取得する。
+      tags:
+      - workout-session
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkoutSession'
+          description: ''
         '204':
           description: No response body
   /api/v1/workout/{id}/:
@@ -538,7 +608,7 @@ paths:
         description: A UUID string identifying this ワークアウト.
         required: true
       tags:
-      - v1
+      - workout
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -561,7 +631,7 @@ paths:
         description: A UUID string identifying this ワークアウト.
         required: true
       tags:
-      - v1
+      - workout
       requestBody:
         content:
           application/json:
@@ -596,7 +666,7 @@ paths:
         description: A UUID string identifying this ワークアウト.
         required: true
       tags:
-      - v1
+      - workout
       requestBody:
         content:
           application/json:
@@ -630,7 +700,7 @@ paths:
         description: A UUID string identifying this ワークアウト.
         required: true
       tags:
-      - v1
+      - workout
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -639,6 +709,42 @@ paths:
           description: No response body
 components:
   schemas:
+    Condition:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        feel:
+          allOf:
+          - $ref: '#/components/schemas/ConditionFeelEnum'
+          title: コンディション
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - feel
+      - id
+      - order
+    ConditionFeelEnum:
+      enum:
+      - best
+      - better
+      - normal
+      - bad
+      - so_bad
+      - cannot
+      type: string
+      description: |-
+        * `best` - 最高！
+        * `better` - いい感じ
+        * `normal` - 普通
+        * `bad` - 良くはない
+        * `so_bad` - 悪い
+        * `cannot` - 無理
     PatchedWorkout:
       type: object
       properties:
@@ -711,7 +817,41 @@ components:
           title: トレーニング終了日時
         condition:
           type: string
+          readOnly: true
+    TrainingArea:
+      type: object
+      properties:
+        id:
+          type: string
           format: uuid
+          readOnly: true
+        training_area:
+          allOf:
+          - $ref: '#/components/schemas/TrainingAreaEnum'
+          title: トレーニング部位
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - id
+      - order
+      - training_area
+    TrainingAreaEnum:
+      enum:
+      - arm
+      - back
+      - chest
+      - leg
+      - abdominal
+      type: string
+      description: |-
+        * `arm` - 腕
+        * `back` - 背中
+        * `chest` - 胸
+        * `leg` - 脚
+        * `abdominal` - 腹
     User:
       type: object
       description: shema生成用
@@ -810,6 +950,42 @@ components:
       - trained_at
       - training_item
       - weight_kg
+    WorkoutFeeling:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        feel:
+          allOf:
+          - $ref: '#/components/schemas/WorkoutFeelingFeelEnum'
+          title: ワークアウト感想
+        order:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - feel
+      - id
+      - order
+    WorkoutFeelingFeelEnum:
+      enum:
+      - too_easy
+      - easy
+      - normal
+      - hard
+      - too_hard
+      - cannot
+      type: string
+      description: |-
+        * `too_easy` - 簡単すぎ
+        * `easy` - 簡単
+        * `normal` - 普通
+        * `hard` - きつい
+        * `too_hard` - キツすぎ
+        * `cannot` - 無理
     WorkoutItem:
       type: object
       properties:
@@ -849,7 +1025,7 @@ components:
           title: トレーニング終了日時
         condition:
           type: string
-          format: uuid
+          readOnly: true
       required:
       - condition
       - id

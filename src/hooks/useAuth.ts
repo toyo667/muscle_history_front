@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../utils/apis";
-import { User } from "../openapi";
+import { AuthenticateApiFactory, User } from "../openapi";
 
 interface Returns {
   user?: User;
@@ -14,7 +14,7 @@ export const useAuth = (): Returns => {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const res = await api().v1UserGetInfoRetrieve();
+      const res = await api(AuthenticateApiFactory).v1UserGetInfoRetrieve();
       setLoading(false);
       if (res.data.id) {
         setUser(res.data);

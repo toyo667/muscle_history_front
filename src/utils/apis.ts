@@ -1,7 +1,20 @@
-import { V1ApiFactory } from "../openapi/api";
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
+import { Configuration } from "../openapi";
 
-export const api = () => {
+type FactoryFunction<T> = (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) => T;
+
+/**
+ * api実行オブジェクトを取得する。factoryはopenapiのもの
+ */
+export const api = <T>(
+  factory: FactoryFunction<T>,
+  config?: Configuration,
+  basePath?: string
+) => {
   const api = axios.create({
     baseURL: window.location.origin,
     headers: {
@@ -9,7 +22,7 @@ export const api = () => {
       "X-CSRFToken": getCookie("csrftoken"),
     },
   });
-  return V1ApiFactory(undefined, undefined, api);
+  return factory(config, basePath, api);
 };
 
 function getCookie(key: string) {

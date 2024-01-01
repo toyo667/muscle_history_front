@@ -154,6 +154,18 @@ export const AddWorkout: React.FC<Props> = ({
           </Select>
         </FormControl>
         <TextField
+          label="Weight(kg)"
+          type="number"
+          value={workout.weight_kg}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={(e) => {
+            const v = parseInt(e.target.value);
+            return setWorkout({ ...workout, weight_kg: v < 0 ? 0 : v });
+          }}
+        />
+        <TextField
           label="Rep"
           type="number"
           value={workout.rep_count}
@@ -181,18 +193,6 @@ export const AddWorkout: React.FC<Props> = ({
               ...workout,
               set_count: v < 0 ? 0 : v,
             });
-          }}
-        />
-        <TextField
-          label="Weight(kg)"
-          type="number"
-          value={workout.weight_kg}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={(e) => {
-            const v = parseInt(e.target.value);
-            return setWorkout({ ...workout, weight_kg: v < 0 ? 0 : v });
           }}
         />
         <FormControl sx={{ minWidth: 140 }}>

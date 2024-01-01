@@ -1,19 +1,21 @@
 import * as React from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import { Home } from "./pages/home";
 import Workout from "./pages/workout";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/workout",
-    element: <Workout />,
-  },
-]);
+import { History } from "./pages/history";
+import { Box } from "@mui/material";
+import { SessionDetail } from "./pages/sessionDetail";
 
 export const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <Box>
+      <Link to="/">トップページヘ</Link>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/workout" element={<Workout />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/history/:sessionId" element={<SessionDetail />} />
+      </Routes>
+    </Box>
+  );
 };

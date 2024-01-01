@@ -3,6 +3,9 @@ import { MasterData } from "../../../hooks/useMasters";
 import { WorkoutItem, WorkoutItemApiFactory } from "../../../openapi";
 import { api } from "../../../utils/apis";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   FormControl,
@@ -10,6 +13,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 interface Props {
   masterData: MasterData;
@@ -58,45 +62,54 @@ export const AddWorkoutItem: React.FC<Props> = ({
   return (
     <Box>
       {/* トレーニング追加 */}
-      <h2>Add new Item</h2>
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl>
-          <TextField
-            label="Training name"
-            variant="outlined"
-            value={wkItem.training_name}
-            onChange={(e) => {
-              setWkItem({
-                ...wkItem,
-                training_name: e.target.value,
-              });
-            }}
-          />
-        </FormControl>
-        <FormControl>
-          <InputLabel shrink htmlFor="select-categories">
-            Native
-          </InputLabel>
-          <Select
-            multiple
-            native
-            value={wkItem.category}
-            // @ts-ignore Typings are not considering `native`
-            onChange={handleChangeMultiple}
-            label="trainingAreas"
-            inputProps={{
-              id: "select-categories",
-            }}
-          >
-            {masterData.trainingAreas.map((area) => (
-              <option key={area.id} value={area.id}>
-                {area.training_area}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-        <Button onClick={addNewWorkoutItem}>トレーニング種類を追加</Button>
-      </Box>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+        >
+          <h2>トレーニング項目を追加</h2>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl>
+              <TextField
+                label="Training name"
+                variant="outlined"
+                value={wkItem.training_name}
+                onChange={(e) => {
+                  setWkItem({
+                    ...wkItem,
+                    training_name: e.target.value,
+                  });
+                }}
+              />
+            </FormControl>
+            <FormControl>
+              <InputLabel shrink htmlFor="select-categories">
+                Native
+              </InputLabel>
+              <Select
+                multiple
+                native
+                value={wkItem.category}
+                // @ts-ignore Typings are not considering `native`
+                onChange={handleChangeMultiple}
+                label="trainingAreas"
+                inputProps={{
+                  id: "select-categories",
+                }}
+              >
+                {masterData.trainingAreas.map((area) => (
+                  <option key={area.id} value={area.id}>
+                    {area.training_area}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+            <Button onClick={addNewWorkoutItem}>トレーニング種類を追加</Button>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
     </Box>
   );
 };

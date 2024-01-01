@@ -1189,6 +1189,53 @@ export const WorkoutApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * 指定したワークアウト種目の直近の結果を取得する。セッションIDは除外用
+         * @param {string} trainingItem 
+         * @param {string} [session] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1WorkoutRecentWorkoutList: async (trainingItem: string, session?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'trainingItem' is not null or undefined
+            assertParamExists('v1WorkoutRecentWorkoutList', 'trainingItem', trainingItem)
+            const localVarPath = `/api/v1/workout/recent_workout/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication cookieAuth required
+
+            if (session !== undefined) {
+                localVarQueryParameter['session'] = session;
+            }
+
+            if (trainingItem !== undefined) {
+                localVarQueryParameter['training_item'] = trainingItem;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * ワークアウト内容
          * @param {string} id A UUID string identifying this ワークアウト.
          * @param {*} [options] Override http request option.
@@ -1332,6 +1379,19 @@ export const WorkoutApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
         /**
+         * 指定したワークアウト種目の直近の結果を取得する。セッションIDは除外用
+         * @param {string} trainingItem 
+         * @param {string} [session] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1WorkoutRecentWorkoutList(trainingItem: string, session?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Workout>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1WorkoutRecentWorkoutList(trainingItem, session, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['WorkoutApi.v1WorkoutRecentWorkoutList']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
          * ワークアウト内容
          * @param {string} id A UUID string identifying this ワークアウト.
          * @param {*} [options] Override http request option.
@@ -1402,6 +1462,16 @@ export const WorkoutApiFactory = function (configuration?: Configuration, basePa
          */
         v1WorkoutPartialUpdate(id: string, patchedWorkout?: PatchedWorkout, options?: any): AxiosPromise<Workout> {
             return localVarFp.v1WorkoutPartialUpdate(id, patchedWorkout, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 指定したワークアウト種目の直近の結果を取得する。セッションIDは除外用
+         * @param {string} trainingItem 
+         * @param {string} [session] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1WorkoutRecentWorkoutList(trainingItem: string, session?: string, options?: any): AxiosPromise<Array<Workout>> {
+            return localVarFp.v1WorkoutRecentWorkoutList(trainingItem, session, options).then((request) => request(axios, basePath));
         },
         /**
          * ワークアウト内容
@@ -1475,6 +1545,18 @@ export class WorkoutApi extends BaseAPI {
      */
     public v1WorkoutPartialUpdate(id: string, patchedWorkout?: PatchedWorkout, options?: RawAxiosRequestConfig) {
         return WorkoutApiFp(this.configuration).v1WorkoutPartialUpdate(id, patchedWorkout, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 指定したワークアウト種目の直近の結果を取得する。セッションIDは除外用
+     * @param {string} trainingItem 
+     * @param {string} [session] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WorkoutApi
+     */
+    public v1WorkoutRecentWorkoutList(trainingItem: string, session?: string, options?: RawAxiosRequestConfig) {
+        return WorkoutApiFp(this.configuration).v1WorkoutRecentWorkoutList(trainingItem, session, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

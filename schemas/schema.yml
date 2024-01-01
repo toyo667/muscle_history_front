@@ -715,6 +715,38 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/workout/recent_workout/:
+    get:
+      operationId: v1_workout_recent_workout_list
+      description: 指定したワークアウト種目の直近の結果を取得する。セッションIDは除外用
+      parameters:
+      - in: query
+        name: session
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: training_item
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - workout
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Workout'
+          description: ''
+        '204':
+          description: No response body
 components:
   schemas:
     Condition:

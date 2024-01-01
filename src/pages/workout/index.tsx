@@ -12,6 +12,7 @@ import {
   Select,
 } from "@mui/material";
 import { WorkoutContent } from "./WorkoutContent";
+import { useConfirmDialog } from "../../hooks/useConfirmDialog";
 
 const Workout = () => {
   const [activeSession, setActiveSession] = useState<WorkoutSession>();
@@ -20,6 +21,7 @@ const Workout = () => {
   const [condition, setCondition] = useState("");
 
   const initialize = useRef(false);
+  const { ConfirmDialog, openConfirmDialog } = useConfirmDialog();
 
   const updateWorkoutSession = useCallback(async () => {
     setLoading(true);
@@ -34,11 +36,11 @@ const Workout = () => {
     }
   }, []);
 
-  /** view */
   useEffect(() => {
-    // 既存のワークアウトセッションを確認する。
+    /** 画面表示時 */
     if (initialize.current) return;
     initialize.current = true;
+
     updateWorkoutSession();
   }, [updateWorkoutSession]);
 
@@ -53,11 +55,15 @@ const Workout = () => {
   const endSession = useCallback(async () => {
     const id = activeSession?.id;
     if (!id) return;
-    await api(WorkoutSessionApiFactory).v1WorkoutSessionPartialUpdate(id, {
-      finished_at: new Date().toISOString(),
-    });
-    updateWorkoutSession();
-  }, [activeSession?.id, updateWorkoutSession]);
+
+    const res = await openConfirmDialog(); // 確認ダイアログ
+    if (res === "confirm") {
+      await api(WorkoutSessionApiFactory).v1WorkoutSessionPartialUpdate(id, {
+        finished_at: new Date().toISOString(),
+      });
+      updateWorkoutSession();
+    }
+  }, [activeSession?.id, updateWorkoutSession, openConfirmDialog]);
 
   return (
     <div>
@@ -68,12 +74,16 @@ const Workout = () => {
           {activeSession ? (
             // セッションあり
             <div>
-              <h2>session: {activeSession.id} is currentry actived.</h2>
+              <h2>セッション実行中</h2>
               <div>
-                <Button onClick={endSession}>endsession</Button>
+                <Button onClick={endSession}>セッションを終了する</Button>
                 <WorkoutContent
                   masterData={masterData}
                   sessionId={activeSession.id}
+                />
+                <ConfirmDialog
+                  title="確認ダイアログ"
+                  message="セッションを終了します。よろしいですか？"
                 />
               </div>
             </div>

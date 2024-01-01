@@ -1,5 +1,4 @@
 import {
-  Box,
   Paper,
   Table,
   TableBody,
@@ -8,9 +7,9 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import React from "react";
 import { MasterData, getMaster } from "../../hooks/useMasters";
 import { Workout, WorkoutItem } from "../../openapi";
-import React from "react";
 
 interface Props {
   masterData: MasterData;

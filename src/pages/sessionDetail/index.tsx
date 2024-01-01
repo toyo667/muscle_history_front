@@ -1,17 +1,15 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { api } from "../../utils/apis";
+import { WorkoutTable } from "../../components/tables/WorkoutTable";
+import { useMasters } from "../../hooks/useMasters";
 import {
   Workout,
   WorkoutApiFactory,
   WorkoutItem,
-  WorkoutItemApi,
   WorkoutItemApiFactory,
-  WorkoutSessionApiFactory,
 } from "../../openapi";
-import { WorkoutTable } from "../../components/tables/WorkoutTable";
-import { useMasters } from "../../hooks/useMasters";
+import { api } from "../../utils/apis";
 
 export const SessionDetail = () => {
   const [workouts, setWorkouts] = useState<Workout[]>();

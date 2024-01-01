@@ -1,19 +1,10 @@
-import {
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
-import { MasterData, getMaster } from "../../../../hooks/useMasters";
+import { WorkoutTable } from "../../../../components/tables/WorkoutTable";
+import { MasterData } from "../../../../hooks/useMasters";
 import { Workout, WorkoutApiFactory, WorkoutItem } from "../../../../openapi";
 import { api } from "../../../../utils/apis";
 import { AddWorkout } from "./AddWorkout";
-import { WorkoutTable } from "../../../../components/tables/WorkoutTable";
 
 interface Props {
   masterData: MasterData;

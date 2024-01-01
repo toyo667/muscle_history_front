@@ -15,7 +15,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { MasterData } from "../../../../hooks/useMasters";
+import { MasterData, getMaster } from "../../../../hooks/useMasters";
 import {
   WorkoutApiFactory,
   Workout as WorkoutFmt,
@@ -230,6 +230,7 @@ export const AddWorkout: React.FC<Props> = ({
                   <TableCell>重さ(kg)</TableCell>
                   <TableCell>レップ数</TableCell>
                   <TableCell>セット数</TableCell>
+                  <TableCell>感想</TableCell>
                   <TableCell>トレーニング日時</TableCell>
                 </TableRow>
               </TableHead>
@@ -253,6 +254,9 @@ export const AddWorkout: React.FC<Props> = ({
                     <TableCell>{row.weight_kg}</TableCell>
                     <TableCell>{row.rep_count}</TableCell>
                     <TableCell>{row.set_count}</TableCell>
+                    <TableCell>
+                      {getMaster(row.feeling, masterData.workoutFeelings)?.feel}
+                    </TableCell>
                     <TableCell>
                       {new Date(row.trained_at).toLocaleString()}
                     </TableCell>

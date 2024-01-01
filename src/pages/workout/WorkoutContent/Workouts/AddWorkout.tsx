@@ -4,24 +4,18 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
-  Paper,
   Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { MasterData, getMaster } from "../../../../hooks/useMasters";
+import { MasterData } from "../../../../hooks/useMasters";
 import {
   WorkoutApiFactory,
   Workout as WorkoutFmt,
   WorkoutItem,
 } from "../../../../openapi";
 import { api } from "../../../../utils/apis";
+import { RecentWorkout } from "./RecentWorkout";
 
 interface Props {
   masterData: MasterData;
@@ -30,9 +24,9 @@ interface Props {
   successCallback: () => void;
 }
 
-type Workout = Omit<WorkoutFmt, "id" | "session" | "trained_at">;
+export type OmitWorkout = Omit<WorkoutFmt, "id" | "session" | "trained_at">;
 
-const INIT_WORKOUT: Workout = {
+const INIT_WORKOUT: OmitWorkout = {
   rep_count: 10,
   set_count: 3,
   weight_kg: 0,
@@ -46,14 +40,14 @@ export const AddWorkout: React.FC<Props> = ({
   sessionId,
   successCallback,
 }) => {
-  const initWorkout: Workout = useMemo(() => {
+  const initWorkout: OmitWorkout = useMemo(() => {
     return {
       ...INIT_WORKOUT,
       feeling:
         masterData.workoutFeelings.find((e) => e.feel === "normal")?.id || "",
     };
   }, [masterData.workoutFeelings]);
-  const [workout, setWorkout] = useState<Workout>(initWorkout);
+  const [workout, setWorkout] = useState<OmitWorkout>(initWorkout);
   const [selectArea, setSelectAres] = useState("");
   const [recentWorkouts, setRecentWorkouts] = useState<WorkoutFmt[]>();
 
@@ -222,49 +216,12 @@ export const AddWorkout: React.FC<Props> = ({
       <Box>
         <h3>直近のワークアウトを参照</h3>
         {recentWorkouts && (
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell></TableCell>
-                  <TableCell>重さ(kg)</TableCell>
-                  <TableCell>レップ数</TableCell>
-                  <TableCell>セット数</TableCell>
-                  <TableCell>感想</TableCell>
-                  <TableCell>トレーニング日時</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {recentWorkouts.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>
-                      <Button
-                        onClick={() =>
-                          setWorkout({
-                            ...workout,
-                            rep_count: row.rep_count,
-                            set_count: row.set_count,
-                            weight_kg: row.weight_kg,
-                          })
-                        }
-                      >
-                        使う
-                      </Button>
-                    </TableCell>
-                    <TableCell>{row.weight_kg}</TableCell>
-                    <TableCell>{row.rep_count}</TableCell>
-                    <TableCell>{row.set_count}</TableCell>
-                    <TableCell>
-                      {getMaster(row.feeling, masterData.workoutFeelings)?.feel}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(row.trained_at).toLocaleString()}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <RecentWorkout
+            recentWorkouts={recentWorkouts}
+            setWorkout={setWorkout}
+            masterData={masterData}
+            workout={workout}
+          />
         )}
       </Box>
     </Box>

@@ -7,7 +7,7 @@ import {
 } from "../openapi";
 import { api } from "../utils/apis";
 
-interface MasterData {
+export interface MasterData {
   conditions: Condition[];
   trainingAreas: TrainingArea[];
   workoutFeelings: WorkoutFeeling[];

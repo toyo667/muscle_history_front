@@ -11,6 +11,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import { WorkoutContent } from "./WorkoutContent";
 
 const Workout = () => {
   const [activeSession, setActiveSession] = useState<WorkoutSession>();
@@ -60,7 +61,7 @@ const Workout = () => {
 
   return (
     <div>
-      {loading ? (
+      {loading || !masterData ? (
         <div>...loading</div>
       ) : (
         <div>
@@ -70,6 +71,7 @@ const Workout = () => {
               <h2>session: {activeSession.id} is currentry actived.</h2>
               <div>
                 <Button onClick={endSession}>endsession</Button>
+                <WorkoutContent masterData={masterData} />
               </div>
             </div>
           ) : (
@@ -88,7 +90,7 @@ const Workout = () => {
                         setCondition(e.target.value);
                       }}
                     >
-                      {masterData?.conditions.map((c) => (
+                      {masterData.conditions.map((c) => (
                         <MenuItem value={c.id} key={c.id}>
                           {c.feel}
                         </MenuItem>

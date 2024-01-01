@@ -13,7 +13,7 @@ export interface MasterData {
   workoutFeelings: WorkoutFeeling[];
 }
 
-interface MasterReturns {
+export interface MasterReturns {
   masterData?: MasterData;
 }
 
@@ -39,4 +39,13 @@ export const useMasters = (): MasterReturns => {
   }, []);
 
   return { masterData };
+};
+
+type MasterDataList = Condition | TrainingArea | WorkoutFeeling;
+
+export const getMaster = <T extends MasterDataList>(
+  id: string,
+  master: T[]
+): T | undefined => {
+  return master.find((m) => m.id === id);
 };

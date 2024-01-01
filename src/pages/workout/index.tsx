@@ -71,7 +71,10 @@ const Workout = () => {
               <h2>session: {activeSession.id} is currentry actived.</h2>
               <div>
                 <Button onClick={endSession}>endsession</Button>
-                <WorkoutContent masterData={masterData} />
+                <WorkoutContent
+                  masterData={masterData}
+                  sessionId={activeSession.id}
+                />
               </div>
             </div>
           ) : (

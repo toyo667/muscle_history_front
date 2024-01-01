@@ -1107,10 +1107,11 @@ export const WorkoutApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * ワークアウト内容
+         * @param {string} [session] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1WorkoutList: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        v1WorkoutList: async (session?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/workout/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1128,6 +1129,10 @@ export const WorkoutApiAxiosParamCreator = function (configuration?: Configurati
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
             // authentication cookieAuth required
+
+            if (session !== undefined) {
+                localVarQueryParameter['session'] = session;
+            }
 
 
     
@@ -1303,11 +1308,12 @@ export const WorkoutApiFp = function(configuration?: Configuration) {
         },
         /**
          * ワークアウト内容
+         * @param {string} [session] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async v1WorkoutList(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Workout>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.v1WorkoutList(options);
+        async v1WorkoutList(session?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Workout>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1WorkoutList(session, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['WorkoutApi.v1WorkoutList']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
@@ -1380,11 +1386,12 @@ export const WorkoutApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * ワークアウト内容
+         * @param {string} [session] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1WorkoutList(options?: any): AxiosPromise<Array<Workout>> {
-            return localVarFp.v1WorkoutList(options).then((request) => request(axios, basePath));
+        v1WorkoutList(session?: string, options?: any): AxiosPromise<Array<Workout>> {
+            return localVarFp.v1WorkoutList(session, options).then((request) => request(axios, basePath));
         },
         /**
          * ワークアウト内容
@@ -1449,12 +1456,13 @@ export class WorkoutApi extends BaseAPI {
 
     /**
      * ワークアウト内容
+     * @param {string} [session] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkoutApi
      */
-    public v1WorkoutList(options?: RawAxiosRequestConfig) {
-        return WorkoutApiFp(this.configuration).v1WorkoutList(options).then((request) => request(this.axios, this.basePath));
+    public v1WorkoutList(session?: string, options?: RawAxiosRequestConfig) {
+        return WorkoutApiFp(this.configuration).v1WorkoutList(session, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2014,11 +2022,13 @@ export const WorkoutSessionApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * ワークアウトセッション(1回のトレーニング)
-         * @param {WorkoutSession} [workoutSession] 
+         * @param {WorkoutSession} workoutSession 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1WorkoutSessionCreate: async (workoutSession?: WorkoutSession, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        v1WorkoutSessionCreate: async (workoutSession: WorkoutSession, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'workoutSession' is not null or undefined
+            assertParamExists('v1WorkoutSessionCreate', 'workoutSession', workoutSession)
             const localVarPath = `/api/v1/workout-session/`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2210,13 +2220,15 @@ export const WorkoutSessionApiAxiosParamCreator = function (configuration?: Conf
         /**
          * ワークアウトセッション(1回のトレーニング)
          * @param {string} id A UUID string identifying this ワークアウトセッション.
-         * @param {WorkoutSession} [workoutSession] 
+         * @param {WorkoutSession} workoutSession 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1WorkoutSessionUpdate: async (id: string, workoutSession?: WorkoutSession, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        v1WorkoutSessionUpdate: async (id: string, workoutSession: WorkoutSession, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('v1WorkoutSessionUpdate', 'id', id)
+            // verify required parameter 'workoutSession' is not null or undefined
+            assertParamExists('v1WorkoutSessionUpdate', 'workoutSession', workoutSession)
             const localVarPath = `/api/v1/workout-session/{id}/`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2273,11 +2285,11 @@ export const WorkoutSessionApiFp = function(configuration?: Configuration) {
         },
         /**
          * ワークアウトセッション(1回のトレーニング)
-         * @param {WorkoutSession} [workoutSession] 
+         * @param {WorkoutSession} workoutSession 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async v1WorkoutSessionCreate(workoutSession?: WorkoutSession, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkoutSession>> {
+        async v1WorkoutSessionCreate(workoutSession: WorkoutSession, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkoutSession>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.v1WorkoutSessionCreate(workoutSession, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['WorkoutSessionApi.v1WorkoutSessionCreate']?.[index]?.url;
@@ -2334,11 +2346,11 @@ export const WorkoutSessionApiFp = function(configuration?: Configuration) {
         /**
          * ワークアウトセッション(1回のトレーニング)
          * @param {string} id A UUID string identifying this ワークアウトセッション.
-         * @param {WorkoutSession} [workoutSession] 
+         * @param {WorkoutSession} workoutSession 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async v1WorkoutSessionUpdate(id: string, workoutSession?: WorkoutSession, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkoutSession>> {
+        async v1WorkoutSessionUpdate(id: string, workoutSession: WorkoutSession, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WorkoutSession>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.v1WorkoutSessionUpdate(id, workoutSession, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['WorkoutSessionApi.v1WorkoutSessionUpdate']?.[index]?.url;
@@ -2364,11 +2376,11 @@ export const WorkoutSessionApiFactory = function (configuration?: Configuration,
         },
         /**
          * ワークアウトセッション(1回のトレーニング)
-         * @param {WorkoutSession} [workoutSession] 
+         * @param {WorkoutSession} workoutSession 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1WorkoutSessionCreate(workoutSession?: WorkoutSession, options?: any): AxiosPromise<WorkoutSession> {
+        v1WorkoutSessionCreate(workoutSession: WorkoutSession, options?: any): AxiosPromise<WorkoutSession> {
             return localVarFp.v1WorkoutSessionCreate(workoutSession, options).then((request) => request(axios, basePath));
         },
         /**
@@ -2410,11 +2422,11 @@ export const WorkoutSessionApiFactory = function (configuration?: Configuration,
         /**
          * ワークアウトセッション(1回のトレーニング)
          * @param {string} id A UUID string identifying this ワークアウトセッション.
-         * @param {WorkoutSession} [workoutSession] 
+         * @param {WorkoutSession} workoutSession 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        v1WorkoutSessionUpdate(id: string, workoutSession?: WorkoutSession, options?: any): AxiosPromise<WorkoutSession> {
+        v1WorkoutSessionUpdate(id: string, workoutSession: WorkoutSession, options?: any): AxiosPromise<WorkoutSession> {
             return localVarFp.v1WorkoutSessionUpdate(id, workoutSession, options).then((request) => request(axios, basePath));
         },
     };
@@ -2439,12 +2451,12 @@ export class WorkoutSessionApi extends BaseAPI {
 
     /**
      * ワークアウトセッション(1回のトレーニング)
-     * @param {WorkoutSession} [workoutSession] 
+     * @param {WorkoutSession} workoutSession 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkoutSessionApi
      */
-    public v1WorkoutSessionCreate(workoutSession?: WorkoutSession, options?: RawAxiosRequestConfig) {
+    public v1WorkoutSessionCreate(workoutSession: WorkoutSession, options?: RawAxiosRequestConfig) {
         return WorkoutSessionApiFp(this.configuration).v1WorkoutSessionCreate(workoutSession, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -2495,12 +2507,12 @@ export class WorkoutSessionApi extends BaseAPI {
     /**
      * ワークアウトセッション(1回のトレーニング)
      * @param {string} id A UUID string identifying this ワークアウトセッション.
-     * @param {WorkoutSession} [workoutSession] 
+     * @param {WorkoutSession} workoutSession 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof WorkoutSessionApi
      */
-    public v1WorkoutSessionUpdate(id: string, workoutSession?: WorkoutSession, options?: RawAxiosRequestConfig) {
+    public v1WorkoutSessionUpdate(id: string, workoutSession: WorkoutSession, options?: RawAxiosRequestConfig) {
         return WorkoutSessionApiFp(this.configuration).v1WorkoutSessionUpdate(id, workoutSession, options).then((request) => request(this.axios, this.basePath));
     }
 }

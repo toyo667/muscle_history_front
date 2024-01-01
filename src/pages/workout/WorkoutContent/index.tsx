@@ -4,13 +4,14 @@ import { MasterData } from "../../../hooks/useMasters";
 import { AddWorkoutItem } from "./AddWorkoutItem";
 import { WorkoutItem, WorkoutItemApiFactory } from "../../../openapi";
 import { api } from "../../../utils/apis";
-import { AddWorkout } from "./AddWorkout";
+import { Workouts } from "./Workouts";
 
 interface Props {
   masterData: MasterData;
+  sessionId: string;
 }
 
-export const WorkoutContent: React.FC<Props> = ({ masterData }) => {
+export const WorkoutContent: React.FC<Props> = ({ masterData, sessionId }) => {
   const initialize = useRef(false);
   const [workoutItems, setWorkoutItems] = useState<WorkoutItem[]>();
 
@@ -29,14 +30,17 @@ export const WorkoutContent: React.FC<Props> = ({ masterData }) => {
 
   return (
     <Box>
-      {workoutItems?.map((item) => {
-        return <div key={item.id}>{item.training_name}</div>;
-      })}
       <AddWorkoutItem
         masterData={masterData}
         successCallback={refreshWorkoutItemList}
       />
-      <AddWorkout masterData={masterData} />
+      {workoutItems && (
+        <Workouts
+          masterData={masterData}
+          workoutItems={workoutItems}
+          sessionId={sessionId}
+        />
+      )}
     </Box>
   );
 };

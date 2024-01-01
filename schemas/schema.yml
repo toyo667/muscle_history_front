@@ -206,6 +206,12 @@ paths:
     get:
       operationId: v1_workout_list
       description: ワークアウト内容
+      parameters:
+      - in: query
+        name: session
+        schema:
+          type: string
+          format: uuid
       tags:
       - workout
       security:
@@ -456,6 +462,7 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/WorkoutSession'
+        required: true
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -514,6 +521,7 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/WorkoutSession'
+        required: true
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -817,7 +825,7 @@ components:
           title: トレーニング終了日時
         condition:
           type: string
-          readOnly: true
+          format: uuid
     TrainingArea:
       type: object
       properties:
@@ -1025,7 +1033,7 @@ components:
           title: トレーニング終了日時
         condition:
           type: string
-          readOnly: true
+          format: uuid
       required:
       - condition
       - id

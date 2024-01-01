@@ -74,7 +74,7 @@ export const AddWorkout: React.FC<Props> = ({
         session: sessionId,
       } as any);
       successCallback();
-      setWorkout(initWorkout);
+      setWorkout({ ...initWorkout, training_item: workout.training_item });
     })();
   }, [workout, sessionId, successCallback, initWorkout]);
 

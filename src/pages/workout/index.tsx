@@ -1,27 +1,18 @@
+import { Box } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { RequiredAuth } from "../../utils/requiredAuth";
-import { api } from "../../utils/apis";
-import { WorkoutSession, WorkoutSessionApiFactory } from "../../openapi";
 import { useMasters } from "../../hooks/useMasters";
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
-import { WorkoutContent } from "./WorkoutContent";
-import { useConfirmDialog } from "../../hooks/useConfirmDialog";
+import { WorkoutSession, WorkoutSessionApiFactory } from "../../openapi";
+import { api } from "../../utils/apis";
+import { RequiredAuth } from "../../utils/requiredAuth";
+import { NoSession } from "./NoSession";
+import { Session } from "./Session";
 
 const Workout = () => {
   const [activeSession, setActiveSession] = useState<WorkoutSession>();
   const { masterData } = useMasters();
   const [loading, setLoading] = useState(false);
-  const [condition, setCondition] = useState("");
 
   const initialize = useRef(false);
-  const { ConfirmDialog, openConfirmDialog } = useConfirmDialog();
 
   const updateWorkoutSession = useCallback(async () => {
     setLoading(true);
@@ -44,80 +35,29 @@ const Workout = () => {
     updateWorkoutSession();
   }, [updateWorkoutSession]);
 
-  const startSession = useCallback(async () => {
-    if (!condition) return;
-    await api(WorkoutSessionApiFactory).v1WorkoutSessionCreate({
-      condition: condition,
-    } as any);
-    updateWorkoutSession();
-  }, [condition, updateWorkoutSession]);
-
-  const endSession = useCallback(async () => {
-    const id = activeSession?.id;
-    if (!id) return;
-
-    const res = await openConfirmDialog(); // 確認ダイアログ
-    if (res === "confirm") {
-      await api(WorkoutSessionApiFactory).v1WorkoutSessionPartialUpdate(id, {
-        finished_at: new Date().toISOString(),
-      });
-      updateWorkoutSession();
-    }
-  }, [activeSession?.id, updateWorkoutSession, openConfirmDialog]);
-
   return (
-    <div>
+    <Box>
       {loading || !masterData ? (
-        <div>...loading</div>
+        <Box>...loading</Box>
       ) : (
-        <div>
+        <Box>
           {activeSession ? (
             // セッションあり
-            <div>
-              <h2>セッション実行中</h2>
-              <div>
-                <Button onClick={endSession}>セッションを終了する</Button>
-                <WorkoutContent
-                  masterData={masterData}
-                  sessionId={activeSession.id}
-                />
-                <ConfirmDialog
-                  title="確認ダイアログ"
-                  message="セッションを終了します。よろしいですか？"
-                />
-              </div>
-            </div>
+            <Session
+              endSessionCallback={updateWorkoutSession}
+              masterData={masterData}
+              activeSession={activeSession}
+            />
           ) : (
             // セッションなし
-            <div>
-              <h2>no active session</h2>
-              <div>
-                <h3>startSession</h3>
-                <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id="cond-select">Condition</InputLabel>
-                    <Select
-                      labelId="cond-select"
-                      value={condition}
-                      onChange={(e) => {
-                        setCondition(e.target.value);
-                      }}
-                    >
-                      {masterData.conditions.map((c) => (
-                        <MenuItem value={c.id} key={c.id}>
-                          {c.feel}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-                <Button onClick={startSession}>start</Button>
-              </div>
-            </div>
+            <NoSession
+              startSessionCallback={updateWorkoutSession}
+              conditions={masterData.conditions}
+            />
           )}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

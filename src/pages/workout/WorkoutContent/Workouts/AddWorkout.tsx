@@ -15,7 +15,7 @@ import {
   WorkoutItem,
 } from "../../../../openapi";
 import { api } from "../../../../utils/apis";
-import { RecentWorkout } from "./RecentWorkout";
+import { WorkoutTable } from "./WorkoutTable";
 
 interface Props {
   masterData: MasterData;
@@ -50,6 +50,7 @@ export const AddWorkout: React.FC<Props> = ({
   const [workout, setWorkout] = useState<OmitWorkout>(initWorkout);
   const [selectArea, setSelectAres] = useState("");
   const [recentWorkouts, setRecentWorkouts] = useState<WorkoutFmt[]>();
+  const [bestWorkout, setBestWorkout] = useState<WorkoutFmt[]>();
 
   const addWorkout = useCallback(() => {
     // TODO: バリデーションはもうちょっと真面目にやる。。
@@ -81,13 +82,15 @@ export const AddWorkout: React.FC<Props> = ({
   }, [selectArea, workoutItems]);
 
   useEffect(() => {
-    /** トレーニング種目が変わったときにトリガー 直近のワークアウトを取得する */
+    /** トレーニング種目が変わったときにトリガー 直近とベストのワークアウトを取得する */
     if (!workout.training_item) {
       setRecentWorkouts(undefined);
       return;
     }
+
     (async () => {
-      const res = await api(WorkoutApiFactory).v1WorkoutRecentWorkoutList(
+      const factory = api(WorkoutApiFactory);
+      const res = await factory.v1WorkoutRecentWorkoutList(
         workout.training_item,
         sessionId
       );
@@ -95,6 +98,15 @@ export const AddWorkout: React.FC<Props> = ({
         setRecentWorkouts(res.data);
       } else {
         setRecentWorkouts(undefined);
+      }
+
+      const resBest = await factory.v1WorkoutBestWorkoutList(
+        workout.training_item
+      );
+      if (resBest.status === 200) {
+        setBestWorkout(resBest.data);
+      } else {
+        setBestWorkout(undefined);
       }
     })();
   }, [workout.training_item, sessionId]);
@@ -216,8 +228,19 @@ export const AddWorkout: React.FC<Props> = ({
       <Box>
         <h3>直近のワークアウトを参照</h3>
         {recentWorkouts && (
-          <RecentWorkout
-            recentWorkouts={recentWorkouts}
+          <WorkoutTable
+            tableWorkout={recentWorkouts}
+            setWorkout={setWorkout}
+            masterData={masterData}
+            workout={workout}
+          />
+        )}
+      </Box>
+      <Box>
+        <h3>過去ベストのワークアウトを参照</h3>
+        {bestWorkout && (
+          <WorkoutTable
+            tableWorkout={bestWorkout}
             setWorkout={setWorkout}
             masterData={masterData}
             workout={workout}

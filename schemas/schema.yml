@@ -715,6 +715,38 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/v1/workout/best_workout/:
+    get:
+      operationId: v1_workout_best_workout_list
+      description: レップ回数ごとの過去のベストワークアウトを取得する。
+      parameters:
+      - in: query
+        name: session
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: training_item
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - workout
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Workout'
+          description: ''
+        '204':
+          description: No response body
   /api/v1/workout/recent_workout/:
     get:
       operationId: v1_workout_recent_workout_list
@@ -884,6 +916,7 @@ components:
       - back
       - chest
       - leg
+      - shoulder
       - abdominal
       type: string
       description: |-
@@ -891,6 +924,7 @@ components:
         * `back` - 背中
         * `chest` - 胸
         * `leg` - 脚
+        * `shoulder` - 肩
         * `abdominal` - 腹
     User:
       type: object

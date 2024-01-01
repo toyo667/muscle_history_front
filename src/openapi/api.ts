@@ -207,7 +207,7 @@ export interface TrainingArea {
 
 
 /**
- * * `arm` - 腕 * `back` - 背中 * `chest` - 胸 * `leg` - 脚 * `abdominal` - 腹
+ * * `arm` - 腕 * `back` - 背中 * `chest` - 胸 * `leg` - 脚 * `shoulder` - 肩 * `abdominal` - 腹
  * @export
  * @enum {string}
  */
@@ -217,6 +217,7 @@ export const TrainingAreaEnum = {
     Back: 'back',
     Chest: 'chest',
     Leg: 'leg',
+    Shoulder: 'shoulder',
     Abdominal: 'abdominal'
 } as const;
 
@@ -1026,6 +1027,53 @@ export type SchemaRetrieveLangEnum = typeof SchemaRetrieveLangEnum[keyof typeof 
 export const WorkoutApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * レップ回数ごとの過去のベストワークアウトを取得する。
+         * @param {string} trainingItem 
+         * @param {string} [session] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1WorkoutBestWorkoutList: async (trainingItem: string, session?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'trainingItem' is not null or undefined
+            assertParamExists('v1WorkoutBestWorkoutList', 'trainingItem', trainingItem)
+            const localVarPath = `/api/v1/workout/best_workout/`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
+
+            // authentication cookieAuth required
+
+            if (session !== undefined) {
+                localVarQueryParameter['session'] = session;
+            }
+
+            if (trainingItem !== undefined) {
+                localVarQueryParameter['training_item'] = trainingItem;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * ワークアウト内容
          * @param {Workout} workout 
          * @param {*} [options] Override http request option.
@@ -1330,6 +1378,19 @@ export const WorkoutApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = WorkoutApiAxiosParamCreator(configuration)
     return {
         /**
+         * レップ回数ごとの過去のベストワークアウトを取得する。
+         * @param {string} trainingItem 
+         * @param {string} [session] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async v1WorkoutBestWorkoutList(trainingItem: string, session?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Workout>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.v1WorkoutBestWorkoutList(trainingItem, session, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['WorkoutApi.v1WorkoutBestWorkoutList']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
          * ワークアウト内容
          * @param {Workout} workout 
          * @param {*} [options] Override http request option.
@@ -1427,6 +1488,16 @@ export const WorkoutApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = WorkoutApiFp(configuration)
     return {
         /**
+         * レップ回数ごとの過去のベストワークアウトを取得する。
+         * @param {string} trainingItem 
+         * @param {string} [session] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        v1WorkoutBestWorkoutList(trainingItem: string, session?: string, options?: any): AxiosPromise<Array<Workout>> {
+            return localVarFp.v1WorkoutBestWorkoutList(trainingItem, session, options).then((request) => request(axios, basePath));
+        },
+        /**
          * ワークアウト内容
          * @param {Workout} workout 
          * @param {*} [options] Override http request option.
@@ -1502,6 +1573,18 @@ export const WorkoutApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class WorkoutApi extends BaseAPI {
+    /**
+     * レップ回数ごとの過去のベストワークアウトを取得する。
+     * @param {string} trainingItem 
+     * @param {string} [session] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WorkoutApi
+     */
+    public v1WorkoutBestWorkoutList(trainingItem: string, session?: string, options?: RawAxiosRequestConfig) {
+        return WorkoutApiFp(this.configuration).v1WorkoutBestWorkoutList(trainingItem, session, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * ワークアウト内容
      * @param {Workout} workout 

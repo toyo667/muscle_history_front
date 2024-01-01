@@ -14,14 +14,14 @@ import React from "react";
 import { OmitWorkout } from "./AddWorkout";
 
 interface Props {
-  recentWorkouts: Workout[];
+  tableWorkout: Workout[];
   setWorkout: (v: OmitWorkout) => void;
   masterData: MasterData;
   workout: OmitWorkout;
 }
 
-export const RecentWorkout: React.FC<Props> = ({
-  recentWorkouts,
+export const WorkoutTable: React.FC<Props> = ({
+  tableWorkout: recentWorkouts,
   setWorkout,
   masterData,
   workout,

@@ -1,7 +1,8 @@
 import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { RequiredAuth } from "../../utils/requiredAuth";
 
-export const Home = () => {
+const Home = () => {
   return (
     <Box>
       <Box>
@@ -13,3 +14,5 @@ export const Home = () => {
     </Box>
   );
 };
+
+export default RequiredAuth(Home);

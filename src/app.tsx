@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import { Home } from "./pages/home";
+import Home from "./pages/home";
 import Workout from "./pages/workout";
-import { History } from "./pages/history";
+import History from "./pages/history";
 import { Box } from "@mui/material";
-import { SessionDetail } from "./pages/sessionDetail";
+import SessionDetail from "./pages/sessionDetail";
 
 export const App = () => {
   return (

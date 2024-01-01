@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
 import { SessionHistory } from "./SessionHistory";
 import { useMasters } from "../../hooks/useMasters";
+import { RequiredAuth } from "../../utils/requiredAuth";
 
-export const History = () => {
+const History = () => {
   const { masterData } = useMasters();
   return (
     <Box>
@@ -11,3 +12,5 @@ export const History = () => {
     </Box>
   );
 };
+
+export default RequiredAuth(History);

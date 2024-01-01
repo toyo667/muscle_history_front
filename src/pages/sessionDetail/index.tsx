@@ -10,8 +10,9 @@ import {
   WorkoutItemApiFactory,
 } from "../../openapi";
 import { api } from "../../utils/apis";
+import { RequiredAuth } from "../../utils/requiredAuth";
 
-export const SessionDetail = () => {
+const SessionDetail = () => {
   const [workouts, setWorkouts] = useState<Workout[]>();
   const [workoutItems, setWorkoutItems] = useState<WorkoutItem[]>();
   const { sessionId } = useParams();
@@ -38,3 +39,5 @@ export const SessionDetail = () => {
     </Box>
   );
 };
+
+export default RequiredAuth(SessionDetail);

@@ -35,7 +35,7 @@ type Workout = Omit<WorkoutFmt, "id" | "session" | "trained_at">;
 const INIT_WORKOUT: Workout = {
   rep_count: 10,
   set_count: 3,
-  weight_kg: 50,
+  weight_kg: 0,
   training_item: "",
   feeling: "",
 };
@@ -46,11 +46,14 @@ export const AddWorkout: React.FC<Props> = ({
   sessionId,
   successCallback,
 }) => {
-  const [workout, setWorkout] = useState<Workout>({
-    ...INIT_WORKOUT,
-    feeling:
-      masterData.workoutFeelings.find((e) => e.feel === "normal")?.id || "",
-  });
+  const initWorkout: Workout = useMemo(() => {
+    return {
+      ...INIT_WORKOUT,
+      feeling:
+        masterData.workoutFeelings.find((e) => e.feel === "normal")?.id || "",
+    };
+  }, [masterData.workoutFeelings]);
+  const [workout, setWorkout] = useState<Workout>(initWorkout);
   const [selectArea, setSelectAres] = useState("");
   const [recentWorkouts, setRecentWorkouts] = useState<WorkoutFmt[]>();
 
@@ -71,8 +74,9 @@ export const AddWorkout: React.FC<Props> = ({
         session: sessionId,
       } as any);
       successCallback();
+      setWorkout(initWorkout);
     })();
-  }, [workout, sessionId, successCallback]);
+  }, [workout, sessionId, successCallback, initWorkout]);
 
   const filteredWorkoutItems = useMemo(() => {
     if (selectArea) {
